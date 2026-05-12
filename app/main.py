@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
+from app.agent.agent_core import get_ai_response
 import os
 
 load_dotenv()
@@ -37,5 +38,5 @@ def health():
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
-    reply = f"You said: {request.message}. AI brain coming next step!"
+    reply = get_ai_response(request.message, request.session_id)
     return ChatResponse(reply=reply, session_id=request.session_id)
